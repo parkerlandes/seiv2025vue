@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Courses</h2>
+    <h2>Courses List</h2>
 
     <p v-if="loading">Loading courses...</p>
     <p v-if="error" style="color: red">{{ error }}</p>
