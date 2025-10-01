@@ -11,3 +11,4 @@ export const getCourses = () => {
   };
 
 export default api;
+
