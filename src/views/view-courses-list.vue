@@ -8,7 +8,10 @@
     <ul v-if="courses.length">
       <li v-for="course in courses" :key="course.courseNumber">
         <strong>{{ course.courseNumber }}</strong> - {{ course.courseName }}  
-        ({{ course.hours }} hrs, Level {{ course.level }}, Dept: {{ course.department }})
+        ({{ course.hours }} hrs, 
+        Level {{ course.level }}, 
+        Description: {{ course.description }}, 
+        Dept: {{ course.department }})
       </li>
     </ul>
   </div>
