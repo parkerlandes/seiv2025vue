@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ViewCoursesList from '../components/view-courses-list.vue'
+import ViewCoursesList from '../views/view-courses-list.vue'
 
 const routes = [
-  { path: '/courses', component: ViewCoursesList }
+  { path: '/courses', component: ViewCoursesList },
 ]
 
 const router = createRouter({
@@ -11,4 +11,3 @@ const router = createRouter({
 })
 
 export default router
-
