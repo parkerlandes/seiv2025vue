@@ -6,8 +6,10 @@ import dns from "dns";
 dns.setDefaultResultOrder("verbatim");
 
 export default () => {
+  // Use the server deployment path as the production base so built assets
+  // are referenced correctly when deployed under /seiv2025/p2/t9
   const baseURL =
-    process.env.APP_ENV === "development" ? "/" : "/tutorial-frontend-vue3/";
+    process.env.APP_ENV === "development" ? "/" : "/seiv2025/p2/t9/";
 
   return defineConfig({
     plugins: [vue(), vuetify({ autoImport: true })],
