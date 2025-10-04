@@ -1,16 +1,14 @@
 <script setup>
-import ViewCoursesList from "./views/view-courses-list.vue"; 
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import MenuBar from "./components/MenuBar.vue";
 </script>
 
 <template>
-  <div id="app">
-    <h1>My App</h1>
-    <router-view />   <!-- ✅ this displays your view -->
-  </div>
+  <v-app>
+    <MenuBar :key="$route.fullPath" />
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
-
-<script>
-export default {
-  name: 'App',
-}
-</script>
