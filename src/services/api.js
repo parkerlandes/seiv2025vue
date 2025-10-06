@@ -1,17 +1,30 @@
 import axios from "axios";
 
-//q
-// Use Vite env variable if present, otherwise fallback to localhost backend
-const base = "http://localhost:3019/course-t9";
+var baseurl = "";
+if (import.meta.env.VITE_API_BASE_URL) {
+  baseurl = "http://localhost:3019/course-t9";
+} else {
+  baseurl = "/course-t9"
+}
 
-// configure axios instance
-const api = axios.create({
-  baseURL: base,
+const apiClient = axios.create({
+  baseURL: baseurl,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "Access-Control-Allow-Origin": "*",
+    crossDomain: true,
+  },
+  transformRequest: (data, headers) => {
+
+    return JSON.stringify(data);
+  },
+  transformResponse: function (data) {
+    data = JSON.parse(data);
+   
+    return data;
+  },
 });
 
-// example API call
-export const getCourses = () => {
-  return api.get('/courses');
-};
-
-export default api;
+export default apiClient;
