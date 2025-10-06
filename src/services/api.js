@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Define the base URL for the backend API
 // Use Vite env variable if present, otherwise fallback to localhost backend
 const base = "http://localhost:3019/course-t9";
 
