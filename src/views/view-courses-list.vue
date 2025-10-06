@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { getCourses } from '../services/api';
+import CourseServices from '../services/courses';
 
 export default {
   data() {
@@ -37,7 +37,7 @@ export default {
     };
   },
   mounted() {
-    getCourses()
+    CourseServices.getAll()
       .then(res => {
         this.courses = res.data;
       })
