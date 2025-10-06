@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env APP_ENV=development vite",
+    "build": "vite build",
     "bundle": "mv .env dist"
   },
   "dependencies": {
