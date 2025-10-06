@@ -1,5 +1,6 @@
 import apiClient from "./services.js";
 
+// Course service methods
 export default {
   getAll() {
     return apiClient.get("/courses");
