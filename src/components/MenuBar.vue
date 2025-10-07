@@ -4,6 +4,19 @@
 
     <v-spacer />
 
+    <!-- Search bar -->
+    <v-text-field
+      v-model="searchQuery"
+      class="search-bar"
+      placeholder="Search courses..."
+      dense
+      hide-details
+      outlined
+      rounded
+      clearable
+      @input="onSearch"
+    ></v-text-field>
+
     <!-- Courses Button -->
     <v-btn class="menu-link" text to="/courses">
       Courses
@@ -19,10 +32,19 @@
 <script>
 export default {
   name: "MenuBar",
+  data() {
+    return {
+      searchQuery: "",
+    };
+  },
   methods: {
     addCourse() {
       console.log("Plus button clicked!");
-      // Add your course-adding logic here
+    },
+    onSearch() {
+      console.log("Search query:", this.searchQuery);
+      // emit event or filter courses here
+      this.$emit("search", this.searchQuery);
     },
   },
 };
@@ -51,6 +73,7 @@ export default {
   color: #333 !important;
   text-transform: none;
   transition: color 0.3s ease, transform 0.2s ease;
+  margin-left: 12px;
 }
 
 /* Hover effect for nav buttons */
@@ -68,12 +91,9 @@ export default {
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-
-  /* Center content */
-  display: grid;           /* use grid for perfect centering */
-  place-items: center;     /* centers both horizontally and vertically */
-
-  font-size: 24px;         /* larger plus sign */
+  display: grid;
+  place-items: center;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
@@ -84,6 +104,17 @@ export default {
   transform: translateY(-1px);
 }
 
+/* ======= Search Bar Styling ======= */
+.search-bar {
+  max-width: 250px;
+  margin-right: 12px;
+  background-color: #fff;
+}
+
+.search-bar .v-input__control {
+  font-size: 0.9rem;
+}
+
 /* Active state (if using router-link-active) */
 .router-link-active {
   font-weight: 600;
@@ -92,12 +123,16 @@ export default {
 }
 
 /* ======= Responsive tweak ======= */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+  .search-bar {
+    max-width: 150px;
+  }
   .menu-title {
     font-size: 1.1rem;
   }
 }
 </style>
+
 
 
 

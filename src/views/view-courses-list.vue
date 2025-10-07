@@ -5,21 +5,28 @@
     <p v-if="loading" class="loading">Loading courses...</p>
     <p v-if="error" class="error">{{ error }}</p>
 
-    <div v-if="courses.length" class="courses-grid">
+    <div v-if="filteredCourses.length" class="courses-grid">
       <div
-        v-for="course in courses"
+        v-for="course in filteredCourses"
         :key="course.courseNumber"
         class="course-card"
       >
-        <div>
+        <!-- Checkbox + course title -->
+        <div class="course-header">
+          <input
+            type="checkbox"
+            :value="course.courseNumber"
+            v-model="selectedCourses"
+            class="course-checkbox"
+          />
           <h3>{{ course.courseNum }} - {{ course.name }}</h3>
+        </div>
 
-          <div class="course-info">
-            <p><span>Hours:</span> {{ course.hours }}</p>
-            <p><span>Level:</span> {{ course.courseLevel }}</p>
-            <p><span>Department:</span> {{ course.dept }}</p>
-            <p v-if="course.description"><span>Description:</span> {{ course.description }}</p>
-          </div>
+        <div class="course-info">
+          <p><span>Hours:</span> {{ course.hours }}</p>
+          <p><span>Level:</span> {{ course.courseLevel }}</p>
+          <p><span>Department:</span> {{ course.dept }}</p>
+          <p v-if="course.description"><span>Description:</span> {{ course.description }}</p>
         </div>
 
         <div class="card-footer">
@@ -43,7 +50,22 @@ export default {
       courses: [],
       loading: true,
       error: null,
+      selectedCourses: [], // track selected courses
+      searchQuery: "",     // bound to MenuBar search
     };
+  },
+  computed: {
+    filteredCourses() {
+      if (!this.searchQuery) return this.courses;
+      const query = this.searchQuery.toLowerCase();
+      return this.courses.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query) ||
+          c.courseNum.toLowerCase().includes(query) ||
+          (c.description && c.description.toLowerCase().includes(query)) ||
+          (c.dept && c.dept.toLowerCase().includes(query))
+      );
+    },
   },
   mounted() {
     getCourses()
@@ -58,11 +80,30 @@ export default {
         this.loading = false;
       });
   },
+  methods: {
+    // Call this when MenuBar emits a search event
+    handleSearch(query) {
+      this.searchQuery = query;
+    },
+  },
 };
 </script>
 
 <style scoped>
-/* ======= Base Layout ======= */
+/* ======= Course Header with Checkbox ======= */
+.course-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.course-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* ======= Existing styles remain unchanged ======= */
 .courses-container {
   min-height: 100vh;
   padding: 3rem 1.5rem;
@@ -71,7 +112,6 @@ export default {
   color: #333;
 }
 
-/* ======= Heading ======= */
 .courses-container h2 {
   text-align: center;
   font-size: 2.5rem;
@@ -80,7 +120,6 @@ export default {
   margin-bottom: 2.5rem;
 }
 
-/* ======= Loading / Error ======= */
 .loading {
   text-align: center;
   color: #666;
@@ -94,7 +133,6 @@ export default {
   font-weight: 600;
 }
 
-/* ======= Grid ======= */
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -103,7 +141,6 @@ export default {
   margin: 0 auto;
 }
 
-/* ======= Course Cards ======= */
 .course-card {
   background: #fff;
   border-radius: 16px;
@@ -122,7 +159,6 @@ export default {
   border-color: #bbb;
 }
 
-/* ======= Course Title ======= */
 .course-card h3 {
   font-size: 1.3rem;
   font-weight: 600;
@@ -135,7 +171,6 @@ export default {
   color: #444;
 }
 
-/* ======= Course Info ======= */
 .course-info p {
   margin: 0.25rem 0;
   color: #555;
@@ -147,7 +182,6 @@ export default {
   color: #222;
 }
 
-/* ======= Button ======= */
 .card-footer {
   text-align: right;
   margin-top: 1rem;
@@ -169,7 +203,6 @@ button:hover {
   transform: scale(1.03);
 }
 
-/* ======= No Courses ======= */
 .no-courses {
   text-align: center;
   margin-top: 2rem;
@@ -177,10 +210,10 @@ button:hover {
   font-size: 1.1rem;
 }
 
-/* ======= Animations ======= */
 @keyframes pulse {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
 }
 </style>
+
 
