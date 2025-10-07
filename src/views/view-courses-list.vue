@@ -1,71 +1,35 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 py-12 px-6">
-    <div class="max-w-6xl mx-auto">
-      <h2
-        class="text-5xl font-extrabold mb-10 text-center text-gray-800 tracking-tight"
-      >
-        Courses List
-      </h2>
+  <div class="courses-container">
+    <h2>Courses List</h2>
 
-      <p v-if="loading" class="text-gray-500 text-center text-lg animate-pulse">
-        Loading courses...
-      </p>
-      <p v-if="error" class="text-red-500 text-center text-lg">
-        {{ error }}
-      </p>
+    <p v-if="loading" class="loading">Loading courses...</p>
+    <p v-if="error" class="error">{{ error }}</p>
 
+    <div v-if="courses.length" class="courses-grid">
       <div
-        v-if="courses.length"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        v-for="course in courses"
+        :key="course.courseNumber"
+        class="course-card"
       >
-        <div
-          v-for="course in courses"
-          :key="course.courseNumber"
-          class="group bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-200 p-6 flex flex-col justify-between"
-        >
-          <div>
-            <h3
-              class="text-2xl font-semibold mb-3 text-gray-900 group-hover:text-gray-700 transition-colors"
-            >
-              {{ course.courseNum }} - {{ course.name }}
-            </h3>
+        <div>
+          <h3>{{ course.courseNum }} - {{ course.name }}</h3>
 
-            <div class="text-gray-700 space-y-1">
-              <p>
-                <span class="font-medium text-gray-800">Hours:</span>
-                {{ course.hours }}
-              </p>
-              <p>
-                <span class="font-medium text-gray-800">Level:</span>
-                {{ course.courseLevel }}
-              </p>
-              <p>
-                <span class="font-medium text-gray-800">Department:</span>
-                {{ course.dept }}
-              </p>
-              <p v-if="course.description">
-                <span class="font-medium text-gray-800">Description:</span>
-                <span class="text-gray-600">{{ course.description }}</span>
-              </p>
-            </div>
-          </div>
-
-          <div class="mt-5 text-right">
-            <button
-              class="mt-3 px-4 py-2 text-sm font-medium bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 shadow-sm hover:shadow-md"
-            >
-              View Details
-            </button>
+          <div class="course-info">
+            <p><span>Hours:</span> {{ course.hours }}</p>
+            <p><span>Level:</span> {{ course.courseLevel }}</p>
+            <p><span>Department:</span> {{ course.dept }}</p>
+            <p v-if="course.description"><span>Description:</span> {{ course.description }}</p>
           </div>
         </div>
-      </div>
 
-      <div
-        v-else-if="!loading && !error"
-        class="text-center text-gray-500 mt-8 text-lg"
-      >
-        No courses available.
+        <div class="card-footer">
+          <button>View Details</button>
+        </div>
       </div>
+    </div>
+
+    <div v-else-if="!loading && !error" class="no-courses">
+      No courses available.
     </div>
   </div>
 </template>
@@ -98,31 +62,125 @@ export default {
 </script>
 
 <style scoped>
-  /* Extra polish for professional look */
-  .group {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .group:hover {
-    transform: translateY(-6px);
-  }
+/* ======= Base Layout ======= */
+.courses-container {
+  min-height: 100vh;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, #f9fafb, #e5e7eb);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #333;
+}
 
-  button {
-    letter-spacing: 0.02em;
-  }
+/* ======= Heading ======= */
+.courses-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 2.5rem;
+}
 
-  /* Add a soft fade-in for the page */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+/* ======= Loading / Error ======= */
+.loading {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  animation: pulse 1.5s infinite ease-in-out;
+}
 
-  div[max-w-6xl] {
-    animation: fadeIn 0.5s ease forwards;
-  }
+.error {
+  text-align: center;
+  color: #d33;
+  font-weight: 600;
+}
+
+/* ======= Grid ======= */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ======= Course Cards ======= */
+.course-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e0e0e0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border-color: #bbb;
+}
+
+/* ======= Course Title ======= */
+.course-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: #111;
+  transition: color 0.25s ease;
+}
+
+.course-card:hover h3 {
+  color: #444;
+}
+
+/* ======= Course Info ======= */
+.course-info p {
+  margin: 0.25rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.course-info span {
+  font-weight: 600;
+  color: #222;
+}
+
+/* ======= Button ======= */
+.card-footer {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #333;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #555;
+  transform: scale(1.03);
+}
+
+/* ======= No Courses ======= */
+.no-courses {
+  text-align: center;
+  margin-top: 2rem;
+  color: #777;
+  font-size: 1.1rem;
+}
+
+/* ======= Animations ======= */
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
 </style>
+
