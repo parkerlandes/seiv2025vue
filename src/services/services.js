@@ -4,7 +4,7 @@ var baseurl = "";
 if (import.meta.env.VITE_API_BASE_URL) {
   baseurl = "http://localhost:3019/course-t9";
 } else {
-  baseurl = "/course-t9"
+  baseurl = "http://project2.eaglesoftwareteam.com/course-t9"
 }
 
 const apiClient = axios.create({
