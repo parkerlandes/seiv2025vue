@@ -33,7 +33,7 @@
             :value="course.id"
             v-model="selectedCourses"
           />
-          <button>View Details</button>
+          <button @click="openCourseDetails(course)">View Details</button>
         </div>
       </div>
 
@@ -104,6 +104,13 @@
       </v-card>
     </v-dialog>
 
+    <CourseDetails
+      v-if="showDetails"
+      :course="selectedCourse"
+      :showDetails="showDetails"
+      @close="showDetails = false"
+    />
+
     <!-- ✅ FooterBar listens for delete event -->
     <FooterBar @delete-selected="deleteSelectedCourses" />
 
@@ -115,9 +122,11 @@
 import coursesApi from "../services/courses.js";
 import MenuBar from "../components/MenuBar.vue";
 import FooterBar from "../components/FooterBar.vue";
+import CourseDetails from "../components/CourseDetails.vue";
+
 
 export default {
-  components: { FooterBar, MenuBar },
+  components: { FooterBar, MenuBar, CourseDetails },
 
   data() {
     return {
@@ -127,6 +136,8 @@ export default {
       selectedCourses: [],
       searchQuery: "",
       showAddDialog: false,
+      selectedCourse: null,
+      showDetails: false,
       newCourse: {
         name: "",
         courseNum: "",
@@ -157,6 +168,11 @@ export default {
   },
 
   methods: {
+    openCourseDetails(course) {
+      this.selectedCourse = course;
+      this.showDetails = true;
+    },
+
     async loadCourses(search = "") {
       try {
         const res = await coursesApi.getAll(search);
