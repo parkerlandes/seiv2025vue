@@ -103,7 +103,7 @@
 
 //import { getCourses } from "../services/api";
 <script>
-import { getCourses } from "../services/api";
+//import { getCourses } from "../services/api";
 import coursesApi from "../services/courses.js";
 import MenuBar from "../components/MenuBar.vue";
 
@@ -165,8 +165,15 @@ export default {
     },
 
     async addCourse() {
+      
       try {
-        await coursesApi.create(this.newCourse);
+        const res = await coursesApi.create(this.newCourse); // send to backend
+        const addedCourse = res.data; // get the created course returned by backend
+
+        // Immediately show it in the list:
+        this.courses.push(addedCourse);
+
+        // Close the dialog and reset form
         this.showAddDialog = false;
         this.newCourse = {
           name: "",
@@ -176,11 +183,15 @@ export default {
           dept: "",
           description: "",
         };
-        this.loadCourses();
+
+        // Optionally: clear any search query to make it visible
+        this.searchQuery = "";
       } catch (err) {
         console.error("Error adding course:", err);
+        alert("Failed to add course.");
       }
-    },
+    }
+
   },
 };
 </script>
