@@ -1,5 +1,6 @@
 import apiClient from "./api.js"; // ✅ Correct import
 
+// Course service methods
 export default {
   getAll(search = "") {
     // If a search term exists, include it as a query parameter

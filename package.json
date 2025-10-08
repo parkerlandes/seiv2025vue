@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env APP_ENV=development vite",
-    "build": "vite build",
-    "bundle": "mv .env dist"
+    "build": "vite build"
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",

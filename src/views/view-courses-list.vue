@@ -36,6 +36,13 @@
           <button>View Details</button>
         </div>
       </div>
+
+      <div
+        v-if="!loading && !error"
+        class="text-center text-gray-500 mt-8 text-lg"
+      >
+        No courses available.
+      </div>
     </div>
 
     <div v-else-if="!loading && !error" class="no-courses">
