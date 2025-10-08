@@ -1,6 +1,10 @@
 <template>
   <div class="courses-container">
-    <MenuBar @search="handleSearch" />
+
+    <MenuBar
+      @open-add-course="showAddDialog = true"
+      @search="handleSearch"
+    />
 
     <h2>Courses List</h2>
 
@@ -37,21 +41,91 @@
     <div v-else-if="!loading && !error" class="no-courses">
       No courses found.
     </div>
+
+    <!-- Add Course Dialog -->
+    <v-dialog v-model="showAddDialog" max-width="500">
+      <v-card>
+        <v-card-title class="text-h6 font-weight-bold">Add New Course</v-card-title>
+
+        <v-card-text>
+          <v-text-field
+            v-model="newCourse.name"
+            label="Course Name"
+            outlined
+            dense
+            required
+          />
+          <v-text-field
+            v-model="newCourse.courseNum"
+            label="Course Number"
+            outlined
+            dense
+            required
+          />
+          <v-text-field
+            v-model="newCourse.hours"
+            label="Credit Hours"
+            outlined
+            dense
+            type="number"
+          />
+          <v-text-field
+            v-model="newCourse.courseLevel"
+            label="Course Level"
+            outlined
+            dense
+          />
+          <v-text-field
+            v-model="newCourse.dept"
+            label="Department"
+            outlined
+            dense
+          />
+          <v-textarea
+            v-model="newCourse.description"
+            label="Description"
+            outlined
+            dense
+          />
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="showAddDialog = false">Cancel</v-btn>
+          <v-btn color="primary" @click="addCourse">Add</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
   </div>
 </template>
 
+//import { getCourses } from "../services/api";
 <script>
-
 import { getCourses } from "../services/api";
+import coursesApi from "../services/courses.js";
+import MenuBar from "../components/MenuBar.vue";
 
 export default {
+  components: { MenuBar },
+
   data() {
     return {
       courses: [],
       loading: true,
       error: null,
-      selectedCourses: [], 
+      selectedCourses: [],
       searchQuery: "",
+      showAddDialog: false,
+      newCourse: {
+        name: "",
+        courseNum: "",
+        hours: "",
+        courseLevel: "",
+        dept: "",
+        description: "",
+      },
     };
   },
 
@@ -68,23 +142,44 @@ export default {
       );
     },
   },
+
   mounted() {
-    getCourses()
-      .then((res) => {
-        this.courses = res.data;
-      })
-      .catch((err) => {
-        console.error(err);
-        this.error = "Failed to load courses";
-      })
-      .finally(() => {
-        this.loading = false;
-      });
+    this.loadCourses();
   },
+
   methods: {
-    // Call this when MenuBar emits a search event
+    async loadCourses(search = "") {
+      try {
+        const res = await coursesApi.getAll(search);
+        this.courses = res.data;
+      } catch (err) {
+        console.error(err);
+        this.error = "Failed to load courses.";
+      } finally {
+        this.loading = false;
+      }
+    },
+
     handleSearch(query) {
       this.searchQuery = query;
+    },
+
+    async addCourse() {
+      try {
+        await coursesApi.create(this.newCourse);
+        this.showAddDialog = false;
+        this.newCourse = {
+          name: "",
+          courseNum: "",
+          hours: "",
+          courseLevel: "",
+          dept: "",
+          description: "",
+        };
+        this.loadCourses();
+      } catch (err) {
+        console.error("Error adding course:", err);
+      }
     },
   },
 };

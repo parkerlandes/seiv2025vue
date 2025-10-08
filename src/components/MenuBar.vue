@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     addCourse() {
-      console.log("Plus button clicked!");
+      this.$emit("open-add-course");
     },
     submitSearch() {
       // Emit the search query to parent
