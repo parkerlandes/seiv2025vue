@@ -14,7 +14,7 @@
       outlined
       rounded
       clearable
-      @input="onSearch"
+      @keyup.enter="submitSearch"
     ></v-text-field>
 
     <!-- Courses Button -->
@@ -22,10 +22,8 @@
       Courses
     </v-btn>
 
-    <!-- Square Plus Button -->
-    <v-btn class="plus-btn" @click="addCourse">
-      +
-    </v-btn>
+    <!-- Plus Button -->
+    <v-btn class="plus-btn" @click="addCourse">+</v-btn>
   </v-app-bar>
 </template>
 
@@ -41,10 +39,9 @@ export default {
     addCourse() {
       console.log("Plus button clicked!");
     },
-    onSearch() {
-      console.log("Search query:", this.searchQuery);
-      // emit event or filter courses here
-      this.$emit("search", this.searchQuery);
+    submitSearch() {
+      // Emit the search query to parent
+      this.$emit("search", this.searchQuery.trim());
     },
   },
 };

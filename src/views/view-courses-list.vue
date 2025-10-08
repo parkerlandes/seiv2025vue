@@ -1,47 +1,47 @@
 <template>
   <div class="courses-container">
+    <MenuBar @search="handleSearch" />
+
     <h2>Courses List</h2>
 
-    <p v-if="loading" class="loading">Loading courses...</p>
-    <p v-if="error" class="error">{{ error }}</p>
+    <div v-if="loading" class="loading">Loading courses...</div>
+    <div v-if="error" class="error">{{ error }}</div>
 
     <div v-if="filteredCourses.length" class="courses-grid">
       <div
         v-for="course in filteredCourses"
-        :key="course.courseNumber"
+        :key="course.courseNum"
         class="course-card"
       >
-        <!-- Checkbox + course title -->
-        <div class="course-header">
-          <input
-            type="checkbox"
-            :value="course.courseNumber"
-            v-model="selectedCourses"
-            class="course-checkbox"
-          />
+        <div>
           <h3>{{ course.courseNum }} - {{ course.name }}</h3>
-        </div>
-
-        <div class="course-info">
-          <p><span>Hours:</span> {{ course.hours }}</p>
-          <p><span>Level:</span> {{ course.courseLevel }}</p>
-          <p><span>Department:</span> {{ course.dept }}</p>
-          <p v-if="course.description"><span>Description:</span> {{ course.description }}</p>
+          <div class="course-info">
+            <p><span>Hours:</span> {{ course.hours }}</p>
+            <p><span>Level:</span> {{ course.courseLevel }}</p>
+            <p><span>Department:</span> {{ course.dept }}</p>
+            <p v-if="course.description"><span>Description:</span> {{ course.description }}</p>
+          </div>
         </div>
 
         <div class="card-footer">
+          <input
+            type="checkbox"
+            :value="course.courseNum"
+            v-model="selectedCourses"
+          />
           <button>View Details</button>
         </div>
       </div>
     </div>
 
     <div v-else-if="!loading && !error" class="no-courses">
-      No courses available.
+      No courses found.
     </div>
   </div>
 </template>
 
 <script>
+
 import { getCourses } from "../services/api";
 
 export default {
@@ -50,10 +50,11 @@ export default {
       courses: [],
       loading: true,
       error: null,
-      selectedCourses: [], // track selected courses
-      searchQuery: "",     // bound to MenuBar search
+      selectedCourses: [], 
+      searchQuery: "",
     };
   },
+
   computed: {
     filteredCourses() {
       if (!this.searchQuery) return this.courses;
@@ -183,8 +184,16 @@ export default {
 }
 
 .card-footer {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 1rem;
+}
+
+.course-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
 button {

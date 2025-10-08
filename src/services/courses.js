@@ -1,22 +1,33 @@
-import apiClient from "./services.js";
+import apiClient from "./api.js"; // ✅ Correct import
 
 export default {
-  getAll() {
+  getAll(search = "") {
+    // If a search term exists, include it as a query parameter
+    if (search && search.trim() !== "") {
+      return apiClient.get(`/courses?search=${encodeURIComponent(search)}`);
+    }
+    // Otherwise, return all courses
     return apiClient.get("/courses");
   },
+
   get(id) {
     return apiClient.get(`/courses/${id}`);
   },
+
   create(data) {
     return apiClient.post("/courses", data);
   },
+
   update(id, data) {
     return apiClient.put(`/courses/${id}`, data);
   },
+
   delete(id) {
     return apiClient.delete(`/courses/${id}`);
   },
+
   deleteAll() {
     return apiClient.delete(`/courses`);
   },
 };
+
