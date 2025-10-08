@@ -1,4 +1,4 @@
-import apiClient from "./api.js"; // ✅ Correct import
+import apiClient from "./services.js"; // ✅ Correct import
 
 // Course service methods
 export default {
