@@ -4,18 +4,21 @@
 
     <v-spacer />
 
-    <!-- Search bar -->
-    <v-text-field
-      v-model="searchQuery"
-      class="search-bar"
-      placeholder="Search courses..."
-      dense
-      hide-details
-      outlined
-      rounded
-      clearable
-      @keyup.enter="submitSearch"
-    ></v-text-field>
+    <!-- Search Label + Bar -->
+    <div class="search-container">
+      <label class="search-label">Search:</label>
+      <v-text-field
+        v-model="searchQuery"
+        class="search-bar"
+        placeholder="Search courses..."
+        dense
+        hide-details
+        outlined
+        rounded
+        clearable
+        @keyup.enter="submitSearch"
+      ></v-text-field>
+    </div>
 
     <!-- Courses Button -->
     <v-btn class="menu-link" text to="/courses">
@@ -26,6 +29,7 @@
     <v-btn class="plus-btn" @click="addCourse">+</v-btn>
   </v-app-bar>
 </template>
+
 
 <script>
 export default {
@@ -101,12 +105,28 @@ export default {
   transform: translateY(-1px);
 }
 
+/* ======= Search Label + Bar Container ======= */
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.search-label {
+  font-weight: 600;
+  color: #333;
+  margin-right: 10px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
 /* ======= Search Bar Styling ======= */
 .search-bar {
-  max-width: 250px;
-  margin-right: 12px;
+  width: 320px;           /* 🔹 Increased from 250px */
+  max-width: 400px;       /* 🔹 Allows expansion on large screens */
   background-color: #fff;
 }
+
 
 .search-bar .v-input__control {
   font-size: 0.9rem;
@@ -122,10 +142,8 @@ export default {
 /* ======= Responsive tweak ======= */
 @media (max-width: 800px) {
   .search-bar {
-    max-width: 150px;
-  }
-  .menu-title {
-    font-size: 1.1rem;
+    width: 200px;         /* 🔹 Keeps it readable on smaller screens */
+    max-width: 250px;
   }
 }
 </style>
