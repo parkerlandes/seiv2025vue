@@ -30,7 +30,7 @@
         <div class="card-footer">
           <input
             type="checkbox"
-            :value="course.courseNum"
+            :value="course.id"
             v-model="selectedCourses"
           />
           <button>View Details</button>
@@ -97,18 +97,20 @@
       </v-card>
     </v-dialog>
 
+    <!-- ✅ FooterBar listens for delete event -->
+    <FooterBar @delete-selected="deleteSelectedCourses" />
 
   </div>
 </template>
 
-//import { getCourses } from "../services/api";
 <script>
 //import { getCourses } from "../services/api";
 import coursesApi from "../services/courses.js";
 import MenuBar from "../components/MenuBar.vue";
+import FooterBar from "../components/FooterBar.vue";
 
 export default {
-  components: { MenuBar },
+  components: { FooterBar, MenuBar },
 
   data() {
     return {
@@ -190,7 +192,33 @@ export default {
         console.error("Error adding course:", err);
         alert("Failed to add course.");
       }
-    }
+    },
+
+    async deleteSelectedCourses() {
+      if (this.selectedCourses.length === 0) {
+        alert("Please select at least one course to delete.");
+        return;
+      }
+
+      try {
+        const confirmed = confirm("Are you sure you want to delete the selected courses?");
+        if (!confirmed) return;
+
+        await coursesApi.deleteMany(this.selectedCourses);
+
+        // Remove deleted courses from the list immediately
+        this.courses = this.courses.filter(
+          c => !this.selectedCourses.includes(c.id)
+        );
+
+        this.selectedCourses = [];
+        alert("Courses deleted successfully!");
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete courses.");
+      }
+    },
+
 
   },
 };

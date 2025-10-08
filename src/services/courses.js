@@ -26,6 +26,11 @@ export default {
     return apiClient.delete(`/courses/${id}`);
   },
 
+  deleteMany(ids) {
+    // DELETE request with array of IDs in request body
+    return apiClient.delete("/courses/multi", { data: { ids } });
+  },
+
   deleteAll() {
     return apiClient.delete(`/courses`);
   },

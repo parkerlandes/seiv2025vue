@@ -15,20 +15,19 @@
   </template>
   
   <script>
-  export default {
+    export default {
     name: "FooterBar",
     methods: {
-      editAction() {
-        console.log("Edit clicked!");
-        // Add your edit logic here
-      },
-      deleteAction() {
-        console.log("Delete clicked!");
-        // Add your delete logic here
-      },
+        editAction() {
+        this.$emit("edit-selected");
+        },
+        deleteAction() {
+        this.$emit("delete-selected");
+        },
     },
-  };
-  </script>
+    };
+</script>
+
   
   <style scoped>
   /* ======= Footer Bar Styling ======= */
