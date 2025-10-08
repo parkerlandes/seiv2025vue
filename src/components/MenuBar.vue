@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app flat height="64" class="menu-bar">
-    <v-toolbar-title class="menu-title">Project 2</v-toolbar-title>
+    <v-toolbar-title class="menu-title">Project 2: Course Listing – Team 9</v-toolbar-title>
 
     <v-spacer />
 

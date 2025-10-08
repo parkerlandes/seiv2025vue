@@ -6,7 +6,7 @@
       @search="handleSearch"
     />
 
-    <h2>Courses List</h2>
+    <h2>Courses</h2>
 
     <div v-if="loading" class="loading">Loading courses...</div>
     <div v-if="error" class="error">{{ error }}</div>
