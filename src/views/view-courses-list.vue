@@ -33,7 +33,11 @@
             :value="course.id"
             v-model="selectedCourses"
           />
-          <button @click="openCourseDetails(course)">View Details</button>
+
+          <div class="button-group">
+            <button @click="openCourseDetails(course)">View Details</button>
+            <button @click="openEditCourse(course)">Edit</button>
+          </div>
         </div>
       </div>
 
@@ -111,6 +115,15 @@
       @close="showDetails = false"
     />
 
+    <EditCourse
+      v-if="showEdit"
+      :showEdit="showEdit"
+      :course="selectedCourse"
+      @save="updateCourse"
+      @close="showEdit = false"
+    />
+
+
     <!-- ✅ FooterBar listens for delete event -->
     <FooterBar @delete-selected="deleteSelectedCourses" />
 
@@ -123,10 +136,11 @@ import coursesApi from "../services/courses.js";
 import MenuBar from "../components/MenuBar.vue";
 import FooterBar from "../components/FooterBar.vue";
 import CourseDetails from "../components/CourseDetails.vue";
+import EditCourse from "../components/EditCourse.vue";
 
 
 export default {
-  components: { FooterBar, MenuBar, CourseDetails },
+  components: { FooterBar, MenuBar, CourseDetails, EditCourse },
 
   data() {
     return {
@@ -138,6 +152,7 @@ export default {
       showAddDialog: false,
       selectedCourse: null,
       showDetails: false,
+      showEdit: false,
       newCourse: {
         name: "",
         courseNum: "",
@@ -172,6 +187,31 @@ export default {
       this.selectedCourse = course;
       this.showDetails = true;
     },
+
+    openEditCourse(course) {
+      this.selectedCourse = { ...course }; // clone so edits don’t immediately apply
+      this.showEdit = true;
+    },
+
+    async updateCourse(updatedCourse) {
+      try {
+        await coursesApi.update(updatedCourse.id, updatedCourse);
+
+        // update locally since backend doesn’t return new data
+        const index = this.courses.findIndex(c => c.id === updatedCourse.id);
+        if (index !== -1) {
+          this.courses[index] = { ...updatedCourse };
+          this.courses = [...this.courses]; // force reactivity
+        }
+
+        this.showEdit = false;
+        alert("Course updated successfully!");
+      } catch (error) {
+        console.error("Error updating course:", error);
+        alert("Failed to update course.");
+      }
+    },
+
 
     async loadCourses(search = "") {
       try {
@@ -241,8 +281,6 @@ export default {
         alert("Failed to delete courses.");
       }
     },
-
-
   },
 };
 </script>
@@ -367,6 +405,11 @@ button {
 button:hover {
   background-color: #555;
   transform: scale(1.03);
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
 }
 
 .no-courses {

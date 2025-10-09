@@ -10,6 +10,7 @@
     <MenuBar :key="$route.fullPath" />
     <FooterBar :key="$route.fullPath" />
     <CourseDetails :key="$route.fullPath" />
+    <EditCourse :key="$route.fullPath" />
     <v-main>
       <router-view />
     </v-main>
