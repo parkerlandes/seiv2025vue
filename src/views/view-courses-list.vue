@@ -5,6 +5,12 @@
       @open-add-course="showAddDialog = true"
       @search="handleSearch"
     />
+    <EditCourse
+      :show-details="showEditDialog"
+      :course="selectedCourse"
+      @close="showEditDialog = false"
+      @save="updateCourse"
+    />
 
     <h2>Courses</h2>
 
@@ -123,10 +129,12 @@ import coursesApi from "../services/courses.js";
 import MenuBar from "../components/MenuBar.vue";
 import FooterBar from "../components/FooterBar.vue";
 import CourseDetails from "../components/CourseDetails.vue";
+import EditCourse from "../components/EditCourse.vue";
+
 
 
 export default {
-  components: { FooterBar, MenuBar, CourseDetails },
+  components: { FooterBar, MenuBar, CourseDetails, EditCourse},
 
   data() {
     return {
@@ -136,6 +144,7 @@ export default {
       selectedCourses: [],
       searchQuery: "",
       showAddDialog: false,
+      showEditDialog: false,
       selectedCourse: null,
       showDetails: false,
       newCourse: {
@@ -214,6 +223,19 @@ export default {
       } catch (err) {
         console.error("Error adding course:", err);
         alert("Failed to add course.");
+      }
+    },
+
+    async updateCourse(updatedCourse) {
+      try {
+        await courseService.update(updatedCourse.id, updatedCourse);
+        alert("Course updated successfully!");
+        this.showEditDialog = false;
+        // Optionally reload or update the local course list:
+        this.loadCourses();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to update course.");
       }
     },
 
