@@ -1,12 +1,7 @@
 <template>
     <v-footer app height="64" class="footer-bar">
       <v-spacer />
-  
-      <!-- Edit Button -->
-      <v-btn class="footer-btn" @click="editAction">
-        Edit
-      </v-btn>
-  
+
       <!-- Delete Button -->
       <v-btn class="footer-btn delete-btn" @click="deleteAction">
         Delete
@@ -16,15 +11,12 @@
   
   <script>
     export default {
-    name: "FooterBar",
-    methods: {
-        editAction() {
-        this.$emit("edit-selected");
-        },
+      name: "FooterBar",
+      methods: {
         deleteAction() {
-        this.$emit("delete-selected");
+          this.$emit("delete-selected");
         },
-    },
+      },
     };
 </script>
 
